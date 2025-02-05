@@ -4,7 +4,7 @@ library(faraway)
 library(tidyverse)
 library(vegan)
 library(stats)
-
+library(ggtext)
 
 # farawayパッケージのgalaの解析を行います。
 # galaはガラパゴス諸島における生物種に関するデータフレームです。
@@ -51,11 +51,9 @@ pdata = expand(data = df,
 tmp = predict(model, se.fit = TRUE, newdata = pdata) |> 
   as_tibble()
 
-
 pdata = bind_cols(pdata, tmp)
 
-
-df |> 
+figure = df |> 
   ggplot() + 
   geom_point(
     aes(x = logarea, y = log10(Species))
@@ -75,5 +73,38 @@ df |>
 summary = summary(model)
 
 summary$coefficients
+
+# 赤池情報量規準(AIC)
+summary$aic
+
+plot(model, which = 1)
+
+# QQプロット
+# 図の中の点線に点が重なっていると正規分布に従っている。
+# このモデルの場合、7,10,13は少し点線から外れているように見えるが、
+# この程度であれば正規性に問題はない
+plot(model, which = 2)
+
+# 
+plot(model, which = 3)
+
+# クックの距離
+# 一般的に0.5を超えるとモデルとして適切ではない可能性がある。
+plot(model, which = 4)
+plot(model, which = 5)
+
+
+# 発表などで紹介する際は、図に統計量も載せておくと親切
+# ここでは、モデルの自由度調整済み決定係数と変数間の相関係数を記載する
+# はじめに、記載する統計量をtibbleにまとめます
+
+
+
+figure |> 
+  geom_richtext(
+    aes()
+  )
+
+
 
 
