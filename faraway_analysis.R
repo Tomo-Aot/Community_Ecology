@@ -5,6 +5,12 @@ library(tidyverse)
 library(vegan)
 library(stats)
 library(ggtext)
+library(magick)
+
+
+# 保存用の図の設定をしておきます。
+height = 80
+width = height
 
 # farawayパッケージのgalaの解析を行います。
 # galaはガラパゴス諸島における生物種に関するデータフレームです。
@@ -22,6 +28,14 @@ df |>
     aes(x = Area, y = Species)
   )
 
+pdfname = "./image/area_sp.pdf"
+pngname = str_replace(pdfname, "pdf", "png")
+ggsave(filename = pdfname, height = height, width = width,
+       units = "mm")
+
+image_read_pdf(pdfname, density = 300) |> 
+  image_write(pngname)
+
 # この図を見た漢字、島の面積はかなり幅があるので、
 # 常用対数に変換したほうが使いやすそうです。
 # 種数も常用対数に変換してみました。
@@ -31,6 +45,14 @@ df |>
   geom_point(
     aes(x = log10(Area), y = log10(Species))
   )
+
+pdfname = "./image/logrea_logsp.pdf"
+pngname = str_replace(pdfname, "pdf", "png")
+ggsave(filename = pdfname, height = height, width = width,
+       units = "mm")
+
+image_read_pdf(pdfname, density = 300) |> 
+  image_write(pngname)
 
 # この図を見ると種数は島の面積の累乗と関係がありそうです。
 # しまの面積が大きくなるほど種数のばらつきが大きくなっているように見えますが、
@@ -67,6 +89,14 @@ figure = df |>
     data = pdata,
     alpha = 0.3
   )
+
+pdfname = "./image/logarea_logsp_model.pdf"
+pngname = str_replace(pdfname, "pdf", "png")
+ggsave(filename = pdfname, height = height, width = width,
+       units = "mm")
+
+image_read_pdf(pdfname, density = 300) |> 
+  image_write(pngname)
 
 # 一見いい感じに見えるモデルですが、適切なモデルかどうかを
 # モデルの統計量と診断図を作成して確かめます。
