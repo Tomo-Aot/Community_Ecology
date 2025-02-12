@@ -40,6 +40,9 @@ tmp = predict(model, se.fit = TRUE, newdata = pdata) |>
   as_tibble()
 ```
 
+
+
+
 ## Communities Dissimilarity
 
 
