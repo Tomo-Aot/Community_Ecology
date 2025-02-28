@@ -15,7 +15,7 @@ gala を用いて、一般化線形モデルを作成します。
 しかし、この図だと島の大きさと生物種の関係が分かりにくいです。
 なので、島の大きさと生物種を常用対数に変換してみます。
 
-![Fig. 2. 常用対数に変換したガラパゴス諸島における島の大きさと生物の多様性の関係](https://raw.githubusercontent.com/Tomo-Aot/Community_Ecology/refs/heads/main/image/logrea_logsp.png)
+<img src="https://raw.githubusercontent.com/Tomo-Aot/Community_Ecology/refs/heads/main/image/logrea_logsp.png" width = "400">
 
 2つの変数を常用対数に変換するとわかりやすい。
 この図を参考にモデルを作成しようと思います。
