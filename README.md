@@ -1,10 +1,11 @@
 # Community Ecology
 
 群集生態学用の解析手法を共有します。
-ここに書いているスクリプトはRで使用することができます。
+ここに書いているスクリプトは R で使用することができます。
 
 
 ## Generalized Linear Model
+
 faraway パッケージの付属データセット
 gala を用いて、一般化線形モデルを作成します。
 このデータセットはガラパゴス諸島における生物種をまとめています。
@@ -45,6 +46,21 @@ tmp = predict(model, se.fit = TRUE, newdata = pdata) |>
 
 ## Communities Dissimilarity
 
+複数間の群集間の多様性は β 多様度 (Beta-Diversity)
+といいます。
+β 多様度は様々な指標で表され、
+群集同士がどれくらい異なるか（もしくは似ているか）を計算します。
+そのため、群集の非類似度 (Dissimilarity)
+や類似度 (Similarity)
+と呼ばれることもあります。
 
-## PERMANOVA
+β 多様度は生息地間の多様性の指標でもあるため、
+群集生態学における重要な要素です。
+
+## Redundancy Analysis (RDA)
+
+
+
+## Permutational Analysis of Variance (PERMANOVA)
+
 
