@@ -5,6 +5,10 @@ library(ggtext)
 library(showtext)
 library(ggpubr)
 
+font_add_google(name = "Noto Sans", family = "ns")
+theme_pubr(base_size = 10, base_family = "ns") |> 
+  theme_set()
+showtext_auto()
 
 res_mat = dune |> scale(scale = TRUE, center = TRUE)
 
@@ -45,6 +49,14 @@ ggplot() +
     aes(x = 0, xend = RDA1 * 2, y = 0, yend = RDA2 * 2),
     data = eig_val,
     arrow = arrow(length = unit(2, "mm"))
+  ) + 
+  geom_richtext(
+    aes(x = RDA1 * 2, y = RDA2 * 2, label = eig_val$factor),
+    data = eig_val,
+    colour = "black",
+    label.colour = NA,
+    fill = NA,
+    vjust = ifelse(eig_val$RDA2 <= 0, 1, 0)
   )
 
 
