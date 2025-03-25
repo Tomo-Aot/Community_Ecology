@@ -8,7 +8,9 @@
 
 faraway パッケージの付属データセット
 gala を用いて、一般化線形モデルを作成します。
-このデータセットはガラパゴス諸島における生物種をまとめています。
+一般化線形モデルは解析手法としてあまり一般的なイメージはないですが、
+ある 1 つの目的変数を説明する際に使われることがあります。
+gala はガラパゴス諸島における生物種をまとめたデータセットです。
 はじめに、島の大きさと生物種の関係について調べてみます。
 
 <img src="https://raw.githubusercontent.com/Tomo-Aot/Community_Ecology/refs/heads/main/image/area_sp.png" width="400">
