@@ -43,7 +43,8 @@ eig_val = env_vector(model)
 ggplot() + 
   geom_point(
     aes(x = RDA1, y = RDA2, colour = dune.env$Use),
-    data = score
+    data = score,
+    size = 3
   ) + 
   geom_segment(
     aes(x = 0, xend = RDA1 * 2, y = 0, yend = RDA2 * 2),
@@ -57,6 +58,13 @@ ggplot() +
     label.colour = NA,
     fill = NA,
     vjust = ifelse(eig_val$RDA2 <= 0, 1, 0)
+  ) + 
+  theme(
+    legend.title = element_blank(),
+    legend.position = c(1, 0),
+    legend.justification = c(1, 0),
+    legend.background = element_blank(),
+    legend.direction = "horizontal"
   )
 
 
