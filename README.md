@@ -61,7 +61,13 @@ tmp = predict(model, se.fit = TRUE, newdata = pdata) |>
 
 ## Redundancy Analysis (RDA)
 
+生態系において、生物データと環境要因の関係は重要な視点です。
+温度や塩分などの環境要因は生物に生理学的・生態学的な影響を与えます。
+しかし、生物群集のレベルで観察する際はそこまで簡単ではありません。
+そこにいる生物の集団が温度によって決まっているとは限らないためです。
+冗長性分析（Redundancy Analysis ; RDA）は生物群集と環境要因の相関関係を調べる解析手法です。
 
+vegan の付属データセット dune を使用します。
 
 ## Permutational Analysis of Variance (PERMANOVA)
 
