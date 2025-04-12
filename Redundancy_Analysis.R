@@ -44,13 +44,41 @@ dune.env = dune.env |> as_tibble() |>
   mutate(Manure = as.double(Manure),
          Moisture = as.double(Moisture))
 
+# introduce Dummy variables
+use = 
+  model.matrix(~ dune.env$Use - 1, data = dune.env) |> as_tibble() |> 
+  mutate(
+    Usehf = str_remove(`dune.env$UseHayfield`, "dune.env//$"),
+    Usehp = str_remove(`dune.env$UseHaypastu`, "dune.env//$"),
+    Usepa = str_remove(`dune.env$UsePasture`, "dune.env//$"),
+  ) |> 
+    select(Usehf, Usehp, Usepa)
+
+mana = 
+  model.matrix(~ dune.env$Management - 1, data = dune.env) |> 
+  as_tibble() |> 
+  mutate(
+    BF = str_remove(`dune.env$ManagementBF`, "dune.env//$"),
+    HF = str_remove(`dune.env$ManagementHF`, "dune.env//$"),
+    NM = str_remove(`dune.env$ManagementNM`, "dune.env//$"),
+    SF = str_remove(`dune.env$ManagementSF`, "dune.env//$"),
+  ) |> 
+    select(BF, HF, NM, SF)
+
+dune.env = dune.env |> 
+  bind_cols(use, mana) |> 
+  select(-c(Management, Use))
+
 # the RDA models
 null_model = res_mat ~ 1
 model = res_mat ~ 
   dune.env$A1 + 
   dune.env$Moisture + 
-  dune.env$Use + 
-  dune.env$Management +
+  dune.env$HF + 
+  dune.env$BF + 
+  dune.env$NM + 
+  dune.env$Usehf + 
+  dune.env$Usehp + 
   dune.env$Manure
 
 null_result = rda(
