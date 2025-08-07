@@ -28,11 +28,11 @@ df |>
     aes(x = Area, y = Species)
   )
 
+# save image
 pdfname = "./image/area_sp.pdf"
 pngname = str_replace(pdfname, "pdf", "png")
 ggsave(filename = pdfname, height = height, width = width,
        units = "mm")
-
 image_read_pdf(pdfname, density = 300) |> 
   image_write(pngname)
 
@@ -61,6 +61,8 @@ image_read_pdf(pdfname, density = 300) |>
 df = df |> 
   mutate(logarea = log10(Area))
 
+# Hypothesis #################################################
+# 島に生息する生物の種数は島の面積が大きくなると増加する
 model = glm(formula = log10(Species) ~ logarea, data = df, 
     family = gaussian("identity"))
 
