@@ -92,6 +92,7 @@ figure = df |>
     alpha = 0.3
   )
 
+# save image
 pdfname = "./image/logarea_logsp_model.pdf"
 pngname = str_replace(pdfname, "pdf", "png")
 ggsave(filename = pdfname, height = height, width = width,
