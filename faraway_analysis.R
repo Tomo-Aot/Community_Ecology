@@ -63,8 +63,10 @@ df = df |>
 
 # Hypothesis #################################################
 # 島に生息する生物の種数は島の面積が大きくなると増加する
-model = glm(formula = log10(Species) ~ logarea, data = df, 
-    family = gaussian("identity"))
+# 正規分布を仮定するので、一般線形モデル
+m0 = glm(formula = logsp ~ 1, data = df, family = gaussian("identity"))
+m1 = glm(formula = log10(Species) ~ logarea, data = df,
+         family = gaussian("identity"))
 
 # それから、今回は検定を行わないので、帰無モデルも作成しません。
 # 次に、作成したモデルの期待値を計算します。
@@ -72,7 +74,7 @@ model = glm(formula = log10(Species) ~ logarea, data = df,
 pdata = expand(data = df,
        logarea = seq(min(logarea), max(logarea), length = 20))
 
-tmp = predict(model, se.fit = TRUE, newdata = pdata) |> 
+tmp = predict(m1, se.fit = TRUE, newdata = pdata) |> 
   as_tibble()
 
 pdata = bind_cols(pdata, tmp)
@@ -97,17 +99,13 @@ pdfname = "./image/logarea_logsp_model.pdf"
 pngname = str_replace(pdfname, "pdf", "png")
 ggsave(filename = pdfname, height = height, width = width,
        units = "mm")
-
 image_read_pdf(pdfname, density = 300) |> 
   image_write(pngname)
 
 # 一見いい感じに見えるモデルですが、適切なモデルかどうかを
 # モデルの統計量と診断図を作成して確かめます。
-summary = summary(model)
-
+summary = summary(m1)
 summary$coefficients
-
-# 赤池情報量規準(AIC)
 summary$aic
 
 plot(model, which = 1)
@@ -128,16 +126,54 @@ plot(model, which = 5)
 
 
 # 発表などで紹介する際は、図に統計量も載せておくと親切
-# ここでは、モデルの自由度調整済み決定係数と変数間の相関係数を記載する
+# ここでは、モデルの自由度調整済み決定係数を記載する
 # はじめに、記載する統計量をtibbleにまとめます
+m1_s = summary(m1)
 
+m0_dev = deviance(m0)
+m1_dev = deviance(m1)
 
+R_sqr = 1 - (m1_dev / m0_dev)
 
-figure |> 
+n = nrow(df)
+p = length(coef(m1))
+
+adj_R_sqr = 1 - ((1 - R_sqr) * (n - 1) / (n - p - 1))
+
+p3 = df |> 
+  ggplot() + 
+  geom_ribbon(
+    aes(x = logarea, ymin = fit - se.fit, ymax = fit + se.fit),
+    data = pdata,
+    alpha = 0.3
+  ) + 
+  geom_line(
+    aes(x = logarea, y = fit),
+    data = pdata
+  ) + 
+  geom_point(
+    aes(x = logarea, y = logsp)
+  ) + 
   geom_richtext(
-    aes()
+    aes(x = 2, y = 0.4, label = str_c("R^2=", round(adj_R_sqr, 3))),
+    data = NULL,
+    hjust = 0,
+    vjust = 0.5,
+    text.colour = "black",
+    colour = NA,
+    size = 4,
+    label.colour = NA,
+    fill = NA
+  ) + 
+  scale_x_continuous(
+    name = "log10(Area)"
+  ) + 
+  scale_y_continuous(
+    name = "log10(Species)"
+  ) + 
+  theme(
+    axis.ticks = element_line(colour = "black")
   )
-
 
 
 
