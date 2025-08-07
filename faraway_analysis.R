@@ -156,13 +156,12 @@ p3 = df |>
     aes(x = logarea, y = logsp)
   ) + 
   geom_richtext(
-    aes(x = 2, y = 0.4, label = str_c("R^2=", round(adj_R_sqr, 3))),
+    aes(x = 2, y = 0.4, label = str_c("R<sup>2</sup>=", round(adj_R_sqr, 3))),
     data = NULL,
     hjust = 0,
     vjust = 0.5,
     text.colour = "black",
     colour = NA,
-    size = 4,
     label.colour = NA,
     fill = NA
   ) + 
