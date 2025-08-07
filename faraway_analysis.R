@@ -57,15 +57,16 @@ image_read_pdf(pdfname, density = 300) |>
 # この図を見ると種数は島の面積の累乗と関係がありそうです。
 # しまの面積が大きくなるほど種数のばらつきが大きくなっているように見えますが、
 # 一旦、このデータでモデルを作成します。
-# さきに常用対数に変換した面積の列を追加しておきます(便利)
+# さきに常用対数に変換した島の面積と生物種数の列を追加しておきます(便利)
 df = df |> 
-  mutate(logarea = log10(Area))
+  mutate(logarea = log10(Area),
+         logsp = log10(Species))
 
 # Hypothesis #################################################
 # 島に生息する生物の種数は島の面積が大きくなると増加する
 # 正規分布を仮定するので、一般線形モデル
 m0 = glm(formula = logsp ~ 1, data = df, family = gaussian("identity"))
-m1 = glm(formula = log10(Species) ~ logarea, data = df,
+m1 = glm(formula = logsp ~ logarea, data = df,
          family = gaussian("identity"))
 
 # それから、今回は検定を行わないので、帰無モデルも作成しません。
@@ -82,7 +83,7 @@ pdata = bind_cols(pdata, tmp)
 figure = df |> 
   ggplot() + 
   geom_point(
-    aes(x = logarea, y = log10(Species))
+    aes(x = logarea, y = logsp)
   ) + 
   geom_line(
     aes(x = logarea, y = fit),
